@@ -5,17 +5,23 @@
   "main": "index.js",
   "author": "Albert Kogan",
   "license": "UNLECENSED",
+  "scripts": {
+    "devStatic": "$(yarn bin)/webpack-dev-server",
+    "devServer": "$(yarn bin)/nodemon"
+  },
   "dependencies": {
     "babel-cli": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "koa": "^1.2.4",
     "koa-hbs": "^0.9.0",
     "koa-logger": "^1.3.0",
-    "koa-router": "^5.4.0",
+    "koa-router": "^5.1.0",
     "koa-send": "^3.2.0",
+    "nodemon": "^1.11.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "uws": "^0.12.0",
-    "webpack": "beta"
+    "webpack": "beta",
+    "webpack-dev-server": "^1.16.2"
   }
 }
