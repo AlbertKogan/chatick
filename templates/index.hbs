@@ -3,15 +3,19 @@
     </head>
     <body>
         <div id="content">
-            {{data}}
+            <div id="js-messages-wrapper">
 
-            <form>
-                <textarea class="js-message-input" name="message">
+            </div>
 
-                </textarea>
-            </form>
+            <div>
+                <form>
+                    <textarea class="js-message-input" name="message">
+
+                    </textarea>
+                </form>
+            </div>
         </div>
-        
+
         <script type="text/javascript" src="{{STATIC_URL}}/bundle.js"></script>
     </body>
 </html>

@@ -1,19 +1,25 @@
-(function () {
-    const socket = new WebSocket('ws://localhost:3001');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-    socket.onopen = function (event) {
-        // send a message to the server
-        socket.send('Hello server!');
-    };
+import Message from './tpl/message.jsx';
 
-    socket.onmessage = function (event) {
-    // print message from server
-        console.log('recieved: ', event.data);
-    };
+const socket = new WebSocket('ws://localhost:3001');
 
-    let messageInput = document.querySelector('.js-message-input');
+socket.onmessage = function (event) {
+    let data = JSON.parse(event.data),
+        element = document.getElementById('js-messages-wrapper');
 
-    messageInput.addEventListener('input', function (e) {
-        socket.send(e.target.value);
-    });
-})();
+    ReactDOM.render(
+        <Message msg={data} />,
+        element
+    );
+};
+
+let messageInput = document.querySelector('.js-message-input');
+
+messageInput.addEventListener('input', function (e) {
+    socket.send(JSON.stringify({
+        name: 'DEMO NAME',
+        msg: e.target.value
+    }));
+});
