@@ -6,6 +6,7 @@
   "author": "Albert Kogan",
   "license": "UNLECENSED",
   "scripts": {
+    "start": "node server/app.js",
     "devStatic": "$(yarn bin)/webpack-dev-server --port=8080 --inline",
     "devServer": "$(yarn bin)/nodemon server/app.js"
   },
