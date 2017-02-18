@@ -19,3 +19,7 @@ wss.on('connection', function (ws) {
     connections.push(ws);
     ws.on('message', onMessage);
 });
+
+module.exports = {
+    onMessage: onMessage
+}
