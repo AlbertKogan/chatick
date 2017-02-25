@@ -1,25 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
 
-import Message from './tpl/message.jsx';
+import Preview from './tpl/preview.jsx';
+import MessageForm from './components/messageForm.js';
+import configureStore from './store/chat.js';
 
-const socket = new WebSocket('ws://localhost:3001');
+const store = configureStore();
 
-socket.onmessage = function (event) {
-    let data = JSON.parse(event.data),
-        element = document.getElementById('js-messages-wrapper');
-
-    ReactDOM.render(
-        <Message msg={data} />,
-        element
-    );
-};
-
-let messageInput = document.querySelector('.js-message-input');
-
-messageInput.addEventListener('input', function (e) {
-    socket.send(JSON.stringify({
-        name: 'DEMO NAME',
-        msg: e.target.value
-    }));
-});
+ReactDOM.render(
+    <Provider store={store}>
+        <MessageForm />
+    </Provider>,
+    document.getElementById('js-form-wrapper')
+);
