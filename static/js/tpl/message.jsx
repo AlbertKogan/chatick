@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 export default function Message (props) {
-    console.log('props ', props);
     let style = {
         marginBottom: 20,
         border: '1px solid grey',

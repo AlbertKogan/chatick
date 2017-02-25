@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-// DRAFT
-import axios from 'axios';
 
-import Socket from './../actions/ws.js';
+import { typeMessage, sendMessage, recieveMessage } from './../actions/message.js';
 import MessageList from './../tpl/list.jsx';
+import Preview from './../tpl/preview.jsx';
+import { MESSAGE_TYPE } from './../constants.js';
 
 
 export default class MessageForm extends Component {
@@ -22,6 +22,10 @@ export default class MessageForm extends Component {
         this.submitMessage = this.submitMessage.bind(this);
     }
 
+    componentWillMount () {
+        this.processMessage();
+    }
+
     inputMessage (e) {
         let message = e.target.value;
 
@@ -29,11 +33,11 @@ export default class MessageForm extends Component {
             message: message
         });
 
-        Socket.send(JSON.stringify({
-            type: 'preview',
+        typeMessage({
+            type: MESSAGE_TYPE.PREVIEW,
             name: this.state.name,
             msg: message
-        }));
+        });
     };
 
     submitMessage (e) {
@@ -42,25 +46,42 @@ export default class MessageForm extends Component {
         const form = e.currentTarget;
         let self = this;
 
-        axios({
+        sendMessage({
             method: form.getAttribute('type'),
             url: form.getAttribute('action'),
             data: {
-                type: 'message',
+                type: MESSAGE_TYPE.MESSAGE,
                 name: this.state.name,
                 msg: this.state.message
             }
-        }).then(function (response) {
-            self.messages.push(response.data);
-            self.renderMessages();
-        }).catch(function (error) {
+        }, (error) => {
             console.log(error);
         });
     };
 
+    processMessage () {
+        let self = this;
+
+        recieveMessage((data) => {
+            if (data.type === MESSAGE_TYPE.MESSAGE) {
+                self.messages.push(data);
+                self.renderMessages();
+            } else if (data.type === MESSAGE_TYPE.PREVIEW) {
+                self.renderPreview(data);
+            }
+        });
+    }
+
+    renderPreview (data) {
+        ReactDOM.render(
+            <Preview msg={data} />,
+            document.getElementById('js-preview-wrapper')
+        );
+    }
+
     renderMessages () {
         ReactDOM.render(
-            <MessageList messages={self.messages} />,
+            <MessageList messages={this.messages} />,
             document.getElementById('js-messages-wrapper')
         );
     }

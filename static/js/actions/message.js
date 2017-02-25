@@ -1,18 +1,17 @@
 import axios from 'axios';
 
-import Socket from './ws.js';
+import Socket from './../ws.js';
+import {
+    SUBMIT_MESSAGE,
+    MESSAGE_TYPE,
+    TYPE_MESSAGE,
+    RECIEVE_MESSAGE
+} from './../constants.js';
 
-export const SUBMIT_MESSAGE = 'SUBMIT_MESSAGE';
-export const TYPE_MESSAGE = 'TYPE_MESSAGE';
-export const RECIEVE_MESSAGE = 'RECIEVE_MESSAGE';
 
-
-export submitMessage (url, data) => {
-    const request = axios({
-        method: 'post',
-        url: url,
-        data: data
-    });
+export const sendMessage = (requestBody, errorHandler) => {
+    // Ответ приходит и обрабатывается через web socket
+    const request = axios(requestBody).catch(errorHandler);
 
     return {
         type: SUBMIT_MESSAGE,
@@ -20,29 +19,26 @@ export submitMessage (url, data) => {
     };
 };
 
-export typeMessage () => {
+export const typeMessage = data => {
+    let message = JSON.stringify(data);
 
-};
+    Socket.send(message);
 
-export recieveMessage () => {
-
-};
-
-Socket.onmessage = function (event) {
-    let data = JSON.parse(event.data);
-    console.log(data.type);
-    console.log('MessageForm.messages', MessageForm);
-
-    // TODO: refactor this
-    if (data.type = 'message') {
-        MessageForm.messages.push(data);
-        MessageForm.renderMessages();
-    } else if (data.type = 'preview') {
-        let element = document.getElementById('js-preview-wrapper');
-
-        ReactDOM.render(
-            <Preview msg={data} />,
-            element
-        );
+    return {
+        type: TYPE_MESSAGE,
+        payload: message
     }
+};
+
+export const recieveMessage = handler => {
+    Socket.onmessage = (event) => {
+        let data = JSON.parse(event.data);
+
+        handler(data);
+
+        return {
+            type: RECIEVE_MESSAGE,
+            payload: data
+        };
+    };
 };

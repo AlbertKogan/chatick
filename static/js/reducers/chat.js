@@ -1,19 +1,30 @@
-import combineReducers from 'redux';
+import { combineReducers } from 'redux';
+import {
+    SUBMIT_MESSAGE,
+    TYPE_MESSAGE,
+    RECIEVE_MESSAGE
+} from './../constants.js'
 
 const message = (state = { name: '', msg: '' }, action) => {
-    return {...state, ...action.payload};
+    switch (action.type) {
+        case SUBMIT_MESSAGE:
+            return Object.asign({}, state);
+        default:
+            return state;
+    }
 };
 
-const preview (state = { name: '', msg: '' }, action) => {
-    return {...state, ...action.payload};
+const preview = (state = { name: '', msg: '' }, action) => {
+    switch (action.type) {
+        case TYPE_MESSAGE:
+            return Object.asign({}, state);
+        default:
+            return state;
+    }
 };
 
-const messages = (satte = [], action) => {
-    return state;
-};
-
-const chatReducer = combineReducers ({
-    messages: messages,
+const chatReducer = combineReducers({
+    message: message,
     preview: preview
 });
 
